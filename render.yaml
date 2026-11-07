@@ -1,0 +1,28 @@
+# Serviço pago: revise o custo na sua conta antes de aplicar este Blueprint.
+services:
+  - type: web
+    name: financia
+    runtime: node
+    plan: 0.5c-512mb
+    region: virginia
+    repo: https://github.com/Luidcasotti/finace
+    branch: feat/publicacao-web
+    autoDeployTrigger: off
+    buildCommand: npm ci --include=dev && npm run lint && npm test && npm run build && npm prune --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: TRUST_PROXY
+        value: '1'
+      - key: APP_TIMEZONE
+        value: America/Rio_Branco
+      - key: DATABASE_PATH
+        value: /var/data/financia.db
+    disk:
+      name: financia-data
+      mountPath: /var/data
+      sizeGB: 1

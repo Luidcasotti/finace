@@ -1,13 +1,16 @@
 import { openDatabase } from './database.js';
 import { createApp } from './app.js';
+import { readConfig } from './config.js';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
-const port = Number(process.env.PORT || 3001);
-const production = process.env.NODE_ENV === 'production';
-if (production && !process.env.APP_ORIGIN?.startsWith('https://'))
-  throw new Error('Configure APP_ORIGIN com o endereço HTTPS da aplicação em produção.');
-const db = openDatabase(process.env.DATABASE_PATH || './data/financia.db');
-const server = createApp(db).listen(port, '127.0.0.1', () =>
-  console.log(`financia API: http://127.0.0.1:${port}`),
+const config = readConfig();
+if (config.production && !existsSync(resolve('dist/index.html'))) {
+  throw new Error('Execute npm run build antes de iniciar a aplicação em produção.');
+}
+const db = openDatabase(config.databasePath);
+const server = createApp(db, config).listen(config.port, config.host, () =>
+  console.log(`financia: http://${config.host}:${config.port}`),
 );
 function shutdown() {
   server.close(() => {

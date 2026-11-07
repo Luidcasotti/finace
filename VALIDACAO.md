@@ -21,3 +21,9 @@ Os fluxos de navegador usam contas criadas apenas no banco separado `data/e2e.db
 Foram inspecionadas capturas de login, painel vazio e painel preenchido nos dois tamanhos de tela. As capturas e o relatório Playwright ficam em `test-results/` e `playwright-report/`, ignorados pelo Git. Os lançamentos ilustrados são exclusivamente dados dos testes.
 
 Não foi realizada publicação em hospedagem. O funcionamento local não depende de credenciais externas. A configuração de uma hospedagem com Node, HTTPS, disco persistente e backups está descrita no [README](README.md).
+
+## Preparação para publicação no Render
+
+Na branch `feat/publicacao-web`, foram aprovados lint, build, 17 testes de servidor/cálculos e os 2 fluxos completos em computador e celular. Os quatro testes adicionais verificam a configuração de produção, a origem HTTPS fornecida pelo Render, a exigência de caminho para o banco persistente e o health check com cadastro/cookies seguros. O `render.yaml` também foi validado com Ajv em modo JSON Schema 2020-12 contra o schema oficial obtido de `https://render.com/schema/render.yaml.json`.
+
+Esses resultados validam a preparação local. A criação de recursos, publicação da URL HTTPS e conferência remota dependem da conexão à conta Render e da confirmação do custo descrito em [DEPLOY.md](DEPLOY.md).

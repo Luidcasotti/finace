@@ -47,11 +47,14 @@ As recorrências são materializadas até o mês consultado, com chave única po
 
 ## Configuração e produção
 
+Para publicar a aplicação atual no Render, há um Blueprint pronto com disco persistente. Veja o [guia de publicação](DEPLOY.md), incluindo custo estimado, conexão da conta e o link para revisar o deploy.
+
 Nenhuma credencial de serviço externo é necessária. O arquivo `.env.example` contém todas as configurações:
 
 | Variável        | Uso                                                                                     |
 | --------------- | --------------------------------------------------------------------------------------- |
 | `PORT`          | Porta da API; padrão `3001`.                                                            |
+| `HOST`          | Rede de escuta; `127.0.0.1` local e `0.0.0.0` em produção.                              |
 | `APP_ORIGIN`    | Origem exata autorizada para alterações; local `http://localhost:5173`.                 |
 | `DATABASE_PATH` | Caminho do SQLite; padrão `./data/financia.db`.                                         |
 | `APP_TIMEZONE`  | Fuso das datas; padrão `America/Rio_Branco`.                                            |
@@ -69,7 +72,7 @@ npm.cmd run build
 npm.cmd start
 ```
 
-O Node serve tanto a API quanto os arquivos compilados de `dist/`, no mesmo domínio. A API escuta em `127.0.0.1`: coloque um proxy HTTPS à frente dela. Em produção, `APP_ORIGIN` com HTTPS é obrigatório e os cookies recebem `Secure`. Use disco persistente com acesso restrito ao processo e mantenha backups consistentes do SQLite, incluindo seu modo WAL; pare o processo antes de copiar o banco ou utilize a API de backup do SQLite. Esta estrutura atende uma instância Node; múltiplas máquinas exigem migrar para um banco compartilhado.
+O Node serve tanto a API quanto os arquivos compilados de `dist/`, no mesmo domínio. Em produção, a API escuta em `0.0.0.0` para receber o tráfego do provedor. A origem HTTPS vem de `APP_ORIGIN` ou de `RENDER_EXTERNAL_URL` no Render, e os cookies recebem `Secure`. Para um servidor próprio, coloque um proxy HTTPS à frente dela; `HOST=127.0.0.1` restringe o Node ao proxy local. Use disco persistente com acesso restrito ao processo e mantenha backups consistentes do SQLite, incluindo seu modo WAL; pare o processo antes de copiar o banco ou utilize a API de backup do SQLite. Esta estrutura atende uma instância Node; múltiplas máquinas exigem migrar para um banco compartilhado.
 
 Senhas usam scrypt com salt aleatório. Sessões usam tokens aleatórios de 256 bits, apenas seus hashes ficam no banco. Cookies são `HttpOnly` e `SameSite=Strict`, com validade de sete dias. O servidor valida a origem e o tipo de conteúdo de todas as alterações, aplica limites de requisições, valida os campos com Zod e restringe todas as consultas ao usuário da sessão. Chaves estrangeiras compostas também impedem relacionar dados de usuários diferentes.
 

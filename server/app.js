@@ -65,6 +65,10 @@ export function createApp(db, options = {}) {
   if (process.env.TRUST_PROXY === '1') app.set('trust proxy', 1);
   app.disable('x-powered-by');
   app.use(helmet({ contentSecurityPolicy: production ? undefined : false }));
+  app.get('/healthz', (_req, res) => {
+    db.prepare('SELECT 1').get();
+    res.set('Cache-Control', 'no-store').json({ status: 'ok' });
+  });
   app.use('/api', (req, res, next) => {
     res.set('Cache-Control', 'no-store');
     if (['POST', 'PATCH', 'DELETE', 'PUT'].includes(req.method)) {
