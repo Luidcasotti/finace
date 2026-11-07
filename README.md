@@ -2,6 +2,8 @@
 
 Primeira versão funcional de um SaaS de finanças pessoais, em português brasileiro. React 19 + TypeScript + Vite no navegador; Express 5 e SQLite no servidor. Requer **Node.js 24 ou superior**.
 
+**Versão web publicada:** [abrir financia](https://financia-luid-casotti.casottimarinetti.chatgpt.site). O acesso é privado com sua conta ChatGPT, e os dados ficam em D1 persistente. Veja os [detalhes da publicação](PUBLICACAO.md). A versão local descrita abaixo continua usando Express e SQLite.
+
 ## Executar localmente
 
 No PowerShell, dentro de `C:\meus projetos\financia`:
@@ -78,7 +80,7 @@ O Node serve tanto a API quanto os arquivos compilados de `dist/`, no mesmo dom�
 
 Senhas usam scrypt com salt aleatório. Sessões usam tokens aleatórios de 256 bits, apenas seus hashes ficam no banco. Cookies são `HttpOnly` e `SameSite=Strict`, com validade de sete dias. O servidor valida a origem e o tipo de conteúdo de todas as alterações, aplica limites de requisições, valida os campos com Zod e restringe todas as consultas ao usuário da sessão. Chaves estrangeiras compostas também impedem relacionar dados de usuários diferentes.
 
-Não há recuperação de senha por e-mail, verificação de e-mail, cobrança de assinatura ou integração bancária nesta versão. Para disponibilizar publicamente, ainda é necessário contratar/configurar a hospedagem Node, domínio, certificado HTTPS, armazenamento persistente e backup. Nenhum serviço foi publicado automaticamente.
+Não há recuperação de senha por e-mail, verificação de e-mail, cobrança de assinatura ou integração bancária nesta versão. Para hospedar a variante Node/SQLite em servidor próprio, configure hospedagem, certificado HTTPS, armazenamento persistente e backup. A variante Sites já foi publicada no endereço informado no início deste documento.
 
 As fontes DM Sans e Manrope são carregadas pelo Google Fonts, com fallback local para sans-serif se o acesso não estiver disponível.
 
