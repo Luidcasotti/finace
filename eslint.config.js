@@ -8,10 +8,21 @@ export default tseslint.config(
   { ignores: ['dist/**', 'node_modules/**', 'playwright-report/**', 'test-results/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
-  { languageOptions: { globals: { ...globals.node, ...globals.browser } }, rules: { '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }] } },
+  {
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+    },
+  },
   {
     files: ['src/**/*.{ts,tsx}'],
     plugins: { 'react-hooks': hooks, 'react-refresh': refresh },
-    rules: { ...hooks.configs.recommended.rules, 'react-refresh/only-export-components': ['error', { allowConstantExport: true }] },
+    rules: {
+      ...hooks.configs.recommended.rules,
+      'react-refresh/only-export-components': ['error', { allowConstantExport: true }],
+    },
   },
 );
