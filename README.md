@@ -47,6 +47,8 @@ As recorrências são materializadas até o mês consultado, com chave única po
 
 ## Configuração e produção
 
+A opção sem contratar hospedagem externa foi preparada para ChatGPT Sites em [sites/financia-web](sites/financia-web/README.md), com D1 persistente e entrada pela conta ChatGPT. A versão Node/SQLite local continua disponível pelos comandos acima.
+
 Para publicar a aplicação atual no Render, há um Blueprint pronto com disco persistente. Veja o [guia de publicação](DEPLOY.md), incluindo custo estimado, conexão da conta e o link para revisar o deploy.
 
 Nenhuma credencial de serviço externo é necessária. O arquivo `.env.example` contém todas as configurações:

@@ -460,6 +460,7 @@ function EmptyState({
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [hostedAuth, setHostedAuth] = useState(false);
   const [today, setToday] = useState('');
   const [month, setMonth] = useState('');
   const [page, setPage] = useState<Page>('overview');
@@ -474,10 +475,11 @@ export default function App() {
   const [hideValues, setHideValues] = useState(false);
   useEffect(() => {
     let active = true;
-    api<{ user: User; today: string }>('/auth/me')
+    api<{ user: User | null; today: string; auth_mode?: string }>('/auth/me')
       .then((result) => {
         if (active) {
           setUser(result.user);
+          setHostedAuth(result.auth_mode === 'chatgpt');
           setToday(result.today);
           setMonth(result.today.slice(0, 7));
         }
@@ -575,6 +577,7 @@ export default function App() {
     return (
       <>
         <Auth
+          hosted={hostedAuth}
           onLogin={(next, date) => {
             setUser(next);
             setToday(date);
@@ -650,14 +653,26 @@ export default function App() {
               <strong>{user.name}</strong>
               <small>Minha conta pessoal</small>
             </div>
-            <button
-              className="icon-button"
-              onClick={logout}
-              title="Sair da conta"
-              aria-label="Sair da conta"
-            >
-              <LogOut size={17} />
-            </button>
+            {hostedAuth ? (
+              <a
+                className="icon-button"
+                href="/signout-with-chatgpt?return_to=%2F"
+                target="_top"
+                title="Sair da conta"
+                aria-label="Sair da conta"
+              >
+                <LogOut size={17} />
+              </a>
+            ) : (
+              <button
+                className="icon-button"
+                onClick={logout}
+                title="Sair da conta"
+                aria-label="Sair da conta"
+              >
+                <LogOut size={17} />
+              </button>
+            )}
           </div>
         </div>
       </aside>

@@ -13,7 +13,13 @@ import {
 import { api } from './lib';
 import type { User } from './types';
 
-export default function Auth({ onLogin }: { onLogin: (user: User, today: string) => void }) {
+export default function Auth({
+  onLogin,
+  hosted = false,
+}: {
+  onLogin: (user: User, today: string) => void;
+  hosted?: boolean;
+}) {
   const [register, setRegister] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -102,75 +108,93 @@ export default function Auth({ onLogin }: { onLogin: (user: User, today: string)
               ? 'Crie sua conta e dê o primeiro passo para uma vida financeira mais leve.'
               : 'Entre na sua conta e cuide do que importa.'}
           </p>
-          <form onSubmit={submit} className="auth-form">
-            {register && (
-              <label>
-                Seu nome
-                <input
-                  name="name"
-                  autoComplete="name"
-                  placeholder="Como podemos chamar você?"
-                  required
-                  minLength={2}
-                  maxLength={100}
-                />
-              </label>
-            )}
-            <label>
-              E-mail
-              <input
-                name="email"
-                type="email"
-                autoComplete="email"
-                placeholder="voce@exemplo.com"
-                required
-                maxLength={254}
-              />
-            </label>
-            <label>
-              Senha
-              <div className="password-field">
-                <input
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete={register ? 'new-password' : 'current-password'}
-                  placeholder={register ? 'Pelo menos 10 caracteres' : 'Sua senha'}
-                  required
-                  minLength={register ? 10 : 1}
-                  maxLength={128}
-                />
+          {hosted ? (
+            <div className="auth-form">
+              <p className="muted">
+                Acesse seu espaço financeiro com sua conta ChatGPT. Seus dados ficam separados por
+                usuário.
+              </p>
+              <a
+                className="button primary auth-submit"
+                href="/signin-with-chatgpt?return_to=%2F"
+                target="_top"
+              >
+                Entrar com ChatGPT <ArrowRight size={18} />
+              </a>
+            </div>
+          ) : (
+            <>
+              <form onSubmit={submit} className="auth-form">
+                {register && (
+                  <label>
+                    Seu nome
+                    <input
+                      name="name"
+                      autoComplete="name"
+                      placeholder="Como podemos chamar você?"
+                      required
+                      minLength={2}
+                      maxLength={100}
+                    />
+                  </label>
+                )}
+                <label>
+                  E-mail
+                  <input
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="voce@exemplo.com"
+                    required
+                    maxLength={254}
+                  />
+                </label>
+                <label>
+                  Senha
+                  <div className="password-field">
+                    <input
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete={register ? 'new-password' : 'current-password'}
+                      placeholder={register ? 'Pelo menos 10 caracteres' : 'Sua senha'}
+                      required
+                      minLength={register ? 10 : 1}
+                      maxLength={128}
+                    />
+                    <button
+                      type="button"
+                      className="icon-button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </label>
+                {error && (
+                  <div className="form-error" role="alert">
+                    {error}
+                  </div>
+                )}
+                <button className="button primary auth-submit" disabled={busy}>
+                  {busy ? 'Aguarde…' : register ? 'Criar minha conta' : 'Entrar na minha conta'}
+                  <ArrowRight size={18} />
+                </button>
+              </form>
+              <div className="auth-switch">
+                {register ? 'Já tem uma conta?' : 'Ainda não tem uma conta?'}{' '}
                 <button
-                  type="button"
-                  className="icon-button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                  className="text-button"
+                  onClick={() => {
+                    setRegister(!register);
+                    setError('');
+                  }}
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {register ? 'Entrar' : 'Criar conta grátis'}
                 </button>
               </div>
-            </label>
-            {error && (
-              <div className="form-error" role="alert">
-                {error}
-              </div>
-            )}
-            <button className="button primary auth-submit" disabled={busy}>
-              {busy ? 'Aguarde…' : register ? 'Criar minha conta' : 'Entrar na minha conta'}
-              <ArrowRight size={18} />
-            </button>
-          </form>
-          <div className="auth-switch">
-            {register ? 'Já tem uma conta?' : 'Ainda não tem uma conta?'}{' '}
-            <button
-              className="text-button"
-              onClick={() => {
-                setRegister(!register);
-                setError('');
-              }}
-            >
-              {register ? 'Entrar' : 'Criar conta grátis'}
-            </button>
-          </div>
+            </>
+          )}
           <div className="auth-security">
             <LockKeyhole size={15} /> Seus dados são pessoais. Seu espaço também.
           </div>

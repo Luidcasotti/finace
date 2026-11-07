@@ -1,5 +1,7 @@
 # Publicar na web com Render
 
+**Alternativa escolhida para evitar o custo do Render:** a versão para ChatGPT Sites está em [sites/financia-web](sites/financia-web/README.md). As instruções abaixo continuam disponíveis como opção paga, mas nenhum serviço Render foi contratado.
+
 O projeto está preparado para hospedar a interface e a API no mesmo serviço Node, preservando o SQLite em disco persistente. A publicação depende de uma conta Render conectada e da aprovação dos recursos pagos. Nenhum recurso foi contratado ou publicado apenas por adicionar estes arquivos ao GitHub.
 
 ## Configuração pronta
